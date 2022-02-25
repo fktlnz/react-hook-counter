@@ -1,46 +1,76 @@
-# Getting Started with Create React App
+# インストール
+リポジトリをClone
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+```
+$ git@github.com:fktlnz/react-hook-counter.git
+```
 
-## Available Scripts
+# ビルド、スタート
+```
+$ cd react-hook-counter
 
-In the project directory, you can run:
+$ npm i
 
-### `npm start`
+$ npm start
+```
+http://127.0.0.1:3000 にアクセスしてアプリ開始  
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+<br>
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+# 【アプリ概要】
+React Hooksでタイマー機能を実装しました。(useCounter.tsx)  
+demoのgifのようにカウントアップとカウントダウンの両パターンに対応してます。
 
-### `npm test`
+# demo
+カウントアップとカウントダウンの両方に対応
+![movie2.gif](https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/187747/17cefaaa-9a3f-f1ee-bbbf-93ccbc174b96.gif)
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-### `npm run build`
+# 使い方
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+| step | must/want| 説明 |
+|:-|:-:|:-|
+|1. useCounter.tsxを読み込み|  must | カウントを表示したいtsxファイルに読み込む  |
+|2. 必要な変数、関数を取り込む | must  | 必要な変数、関数を取り込む  |
+|3. カウントを表示| must  | カウントを表示したい箇所に**count**を記載  |
+|4. カウント終了を検知| want  | カウント終了を検知してなにかする  |
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+  
+<br>
 
-### `npm run eject`
+## [補足] 2. 必要な変数、関数を取り込む
+- 読み込み例
+最低限、countとstartCountがあればOK
+```tsx:
+const {count, isTimerEnd, initCount, startCount} = useCounter();
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- 取り込める変数
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+| 名前| Type|概要|
+|:-:|:-:|:-|
+| *count*  | number | カウント情報|
+| *isTimerEnd*  | boolean | ***true***： カウントが終了した<br>***false***：カウント中 or リセット状態|
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+- 取り込める関数
 
-## Learn More
+| 名前|引数・返り値|概要|
+|:-:|:-|:-|
+| *initCount*  | f(引数なし)：返り値なし| カウントをリセット（*count*を0にして、isTimerEndをfalseとする）|
+| *startCount*  | f( **upLimit?**：number, **downLimit?**：number, **direction?**：string)：返り値なし<br>**upLimit**：カウント上限<br>**downLimit**：カウント下限<br>**direction**：どちらにカウントするか（"up"の場合、下限⇒上限に向かってカウント、"down"の場合、上限⇒下限に向かってカウント）| カウントを開始する|
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+**(startCountの呼び出し例)**
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```tsx
+//引数なし：10⇒0のカウントダウンになる（デフォルト設定）
+//デフォルト設定は、useCounter.tsx(4,5,6行目で変更可)
+startCount();
+
+//100⇒0のカウントダウン
+startCount(100, 0, "down");
+
+//0⇒100のカウントアップ
+startCount(100, 0, "up");
+```
